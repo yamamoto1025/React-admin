@@ -1,0 +1,25 @@
+const locale = {
+  APPLICATIONS: 'Applications',
+  CHAT: 'Chat',
+  LOYALTY: 'Loyalty',
+  REWARD: 'Reward',
+  REWARD_HISTORY: 'Reward History',
+  POINT_HISTORY: 'Point History',
+  ECOMMERCE: 'eCommerce',
+  WOOCOMMERCE: 'Woocommerce',
+  CATEGORY: 'Category',
+  PRODUCT: 'Product',
+  ORDER: 'Order',
+  PROFILE: 'Profile',
+  USERS: 'Users',
+  TEAMS: 'Teams',
+  CUSTOMERS: 'Customers',
+  DASHBOARD: 'Dashboard',
+  SETTINGS: 'Settings',
+  CHANNELS: 'Channels',
+  GENERAL: 'General',
+  REPLIES: 'Replies',
+  // QUICKREPLIES: 'Quick Replies',
+};
+
+export default locale;
