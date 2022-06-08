@@ -1,9 +1,12 @@
-import FuseUtils from '@fuse/utils';
-import AppContext from 'app/AppContext';
-import { Component } from 'react';
-import { connect } from 'react-redux';
-import { matchRoutes } from 'react-router-config';
-import { withRouter } from 'react-router-dom';
+import FuseUtils from "@fuse/utils";
+import AppContext from "app/AppContext";
+import { Component } from "react";
+import { matchRoutes } from "react-router-dom";
+import withRouter from "@fuse/core/withRouter";
+import history from "@history";
+import { connect } from "react-redux";
+
+let loginRedirectUrl = null;
 
 class FuseAuthorization extends Component {
   constructor(props, context) {
@@ -13,6 +16,7 @@ class FuseAuthorization extends Component {
       accessGranted: true,
       routes,
     };
+    this.defaultLoginRedirectUrl = props.loginRedirectUrl || "/";
   }
 
   componentDidMount() {
@@ -34,37 +38,36 @@ class FuseAuthorization extends Component {
   static getDerivedStateFromProps(props, state) {
     const { location, userRole } = props;
     const { pathname } = location;
+    const matchedRoutes = matchRoutes(state.routes, pathname);
 
-    const matched = matchRoutes(state.routes, pathname)[0];
-
+    const matched = matchedRoutes ? matchedRoutes[0] : false;
     return {
-      accessGranted: matched ? FuseUtils.hasPermission(matched.route.auth, userRole) : true,
+      accessGranted: matched
+        ? FuseUtils.hasPermission(matched.route.auth, userRole)
+        : true,
     };
   }
 
   redirectRoute() {
-    const { location, userRole, history } = this.props;
-    const { pathname, state } = location;
-    const redirectUrl = state && state.redirectUrl ? state.redirectUrl : '/';
-
+    const { location, userRole } = this.props;
+    const { pathname } = location;
+    const redirectUrl = loginRedirectUrl || this.defaultLoginRedirectUrl;
+    console.log(pathname);
     /*
         User is guest
         Redirect to Login Page
         */
     if (!userRole || userRole.length === 0) {
-      history.push({
-        pathname: '/login',
-        state: { redirectUrl: pathname },
-      });
+      setTimeout(() => history.push("/sign-in"), 0);
+      loginRedirectUrl = pathname;
     } else {
       /*
         User is member
         User must be on unAuthorized page or just logged in
-        Redirect to dashboard or redirectUrl
+        Redirect to dashboard or loginRedirectUrl
         */
-      history.push({
-        pathname: redirectUrl,
-      });
+      setTimeout(() => history.push("/organization"), 0);
+      loginRedirectUrl = this.defaultLoginRedirectUrl;
     }
   }
 
@@ -74,12 +77,12 @@ class FuseAuthorization extends Component {
   }
 }
 
+FuseAuthorization.contextType = AppContext;
+
 function mapStateToProps({ auth }) {
   return {
     userRole: auth.user.role,
   };
 }
-
-FuseAuthorization.contextType = AppContext;
 
 export default withRouter(connect(mapStateToProps)(FuseAuthorization));
