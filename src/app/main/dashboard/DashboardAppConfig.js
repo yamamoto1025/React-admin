@@ -1,4 +1,6 @@
-import { lazy } from 'react';
+import { lazy } from "react";
+
+const DashboardApp = lazy(() => import("./DashboardApp"));
 
 const DashboardAppConfig = {
   settings: {
@@ -8,8 +10,8 @@ const DashboardAppConfig = {
   },
   routes: [
     {
-      path: '/apps/dashboard',
-      component: lazy(() => import('./DashboardApp')),
+      path: "/apps/dashboard",
+      element: <DashboardApp />,
     },
   ],
 };

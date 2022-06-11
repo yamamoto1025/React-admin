@@ -1,12 +1,12 @@
-import FuseLoading from '@fuse/core/FuseLoading';
-import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import { useDispatch, useSelector } from 'react-redux';
-import { useState, useEffect } from 'react';
-import { updateData } from '../../store/replySlice';
+import FuseLoading from "@fuse/core/FuseLoading";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { updateData } from "../../store/replySlice";
 
 function ReplyInformation(props) {
   const dispatch = useDispatch();
@@ -14,9 +14,9 @@ function ReplyInformation(props) {
   const currentReply = useSelector(({ replyApp }) => replyApp.reply.current);
 
   const [information, setInformation] = useState();
-  const [type, setType] = useState('quick');
-  const [event, setEvent] = useState('response');
-  const [status, setStatus] = useState('active');
+  const [type, setType] = useState("quick");
+  const [event, setEvent] = useState("response");
+  const [status, setStatus] = useState("active");
 
   useEffect(() => {
     if (currentReply) {
@@ -36,7 +36,7 @@ function ReplyInformation(props) {
   if (!currentReply) return <FuseLoading />;
 
   return (
-    <div className="flex flex-col space-y-24 px-20 ">
+    <div className="flex flex-col w-full space-y-24 px-20 ">
       <TextField
         // value={replyInformation && replyInformation.name}
         value={information}
@@ -48,7 +48,7 @@ function ReplyInformation(props) {
         variant="outlined"
         fullWidth
         onChange={(ev) => {
-          updateReply('name', ev.target.value);
+          updateReply("name", ev.target.value);
           setInformation(ev.target.value);
         }}
       />
@@ -62,7 +62,7 @@ function ReplyInformation(props) {
           id="type"
           fullWidth
           onChange={(ev) => {
-            updateReply('type', ev.target.value);
+            updateReply("type", ev.target.value);
             setType(ev.target.value);
           }}
         >
@@ -71,7 +71,7 @@ function ReplyInformation(props) {
         </Select>
       </FormControl>
 
-      {type && type === 'auto' && event && (
+      {type && type === "auto" && event && (
         // {replyInformation && replyInformation.type && replyInformation.type === 'auto' && replyInformation.event && (
         <FormControl variant="outlined" className="w-full">
           <InputLabel>Event</InputLabel>
@@ -83,7 +83,7 @@ function ReplyInformation(props) {
             id="event"
             fullWidth
             onChange={(ev) => {
-              updateReply('event', ev.target.value);
+              updateReply("event", ev.target.value);
               setEvent(ev.target.value);
             }}
           >
@@ -102,7 +102,7 @@ function ReplyInformation(props) {
           id="status"
           fullWidth
           onChange={(ev) => {
-            updateReply('status', ev.target.value);
+            updateReply("status", ev.target.value);
             setStatus(ev.target.value);
           }}
         >

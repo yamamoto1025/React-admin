@@ -1,31 +1,31 @@
-import { useTheme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
-import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import { useTheme } from "@mui/material/styles";
+import makeStyles from "@mui/styles/makeStyles";
+import TextField from "@mui/material/TextField";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
-import Checkbox from '@mui/material/Checkbox';
+import Checkbox from "@mui/material/Checkbox";
 
-import Toolbar from '@mui/material/Toolbar';
-import AppBar from '@mui/material/AppBar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import { Controller, useForm } from 'react-hook-form';
+import Toolbar from "@mui/material/Toolbar";
+import AppBar from "@mui/material/AppBar";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import { Controller, useForm } from "react-hook-form";
 
-import FormControlLabel from '@mui/material/FormControlLabel';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
-import { showMessage } from 'app/store/fuse/messageSlice';
-import _ from '@lodash';
-import firebase from 'firebase/compat/app';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { updateChat, updateChatOwner } from '../store/chatSlice';
+import FormControlLabel from "@mui/material/FormControlLabel";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { showMessage } from "app/store/fuse/messageSlice";
+import _ from "@lodash";
+import firebase from "firebase/compat/app";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { updateChat, updateChatOwner } from "../store/chatSlice";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -34,8 +34,8 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 300,
   },
   chips: {
-    display: 'flex',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexWrap: "wrap",
   },
   chip: {
     margin: 2,
@@ -59,7 +59,7 @@ export function ChatOwnerSetting(props) {
     if (!token) return;
     const response = await axios.get(`/api/${org.id}/user/list`, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
@@ -67,7 +67,7 @@ export function ChatOwnerSetting(props) {
     setUserList(list);
   };
   const handleOwnerChange = async (e) => {
-    if (e.target.value && e.target.value !== '')
+    if (e.target.value && e.target.value !== "")
       dispatch(
         updateChatOwner({
           ...selected,
@@ -93,11 +93,12 @@ export function ChatOwnerSetting(props) {
           labelId="owner-label"
           id="owner-select"
           className="h-full text-white border-slate-100"
-          value={selected && selected.owner ? selected.owner : ''}
+          value={selected && selected.owner ? selected.owner : ""}
           // disableUnderline
           onChange={handleOwnerChange}
           renderValue={(el) => {
-            if (props.isMobile) return <div className="text-gray-900">{el.firstname}</div>;
+            if (props.isMobile)
+              return <div className="text-gray-900">{el.firstname}</div>;
             return <div className="text-gray-100">{el.firstname}</div>;
           }}
         >
@@ -136,19 +137,22 @@ export function ChatStatusSetting(props) {
         className="h-full text-white border-white m-10"
         // variant="outlined"
       >
-        <InputLabel id="demo-simple-select-label" className="text-white border-white">
+        <InputLabel
+          id="demo-simple-select-label"
+          className="text-white border-white"
+        >
           Status
         </InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={selected && selected.status ? selected.status : ''}
+          value={selected && selected.status ? selected.status : ""}
           className="h-full text-white border-white"
           // disableUnderline
           onChange={handleStatusChange}
           renderValue={(status) => {
-            console.log(props);
-            if (props.isMobile) return <div className="text-gray-900">{status}</div>;
+            if (props.isMobile)
+              return <div className="text-gray-900">{status}</div>;
             return <div className="text-gray-100">{status}</div>;
           }}
           //   // <div className={classes.chips}>
@@ -177,9 +181,11 @@ export function TicketDetailSetting() {
   const chat = useSelector(({ chatApp }) => chatApp.current.selected);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const { control, watch, reset, handleSubmit, formState, getValues } = useForm({
-    mode: 'onChange',
-  });
+  const { control, watch, reset, handleSubmit, formState, getValues } = useForm(
+    {
+      mode: "onChange",
+    }
+  );
   const { isValid, dirtyFields, errors } = formState;
 
   useEffect(() => {
@@ -190,7 +196,7 @@ export function TicketDetailSetting() {
     }
     return () => {
       reset({
-        ticketDetail: '',
+        ticketDetail: "",
       });
     };
   }, [dialogOpen, chat]);
@@ -206,27 +212,27 @@ export function TicketDetailSetting() {
         setDialogOpen(false);
         dispatch(
           showMessage({
-            message: 'Ticket Detail success!',
+            message: "Ticket Detail success!",
             autoHideDuration: 2000, // ms
             anchorOrigin: {
-              vertical: 'top', // top bottom
-              horizontal: 'center', // left center right
+              vertical: "top", // top bottom
+              horizontal: "center", // left center right
             },
-            variant: 'success', // success error info warning null
+            variant: "success", // success error info warning null
           })
         );
       })
       .catch((error) => {
-        console.error('[TicketDetailSetting] error ', error.message);
+        console.error("[TicketDetailSetting] error ", error.message);
         dispatch(
           showMessage({
-            message: 'Ticket Detail fail!',
+            message: "Ticket Detail fail!",
             autoHideDuration: 2000, // ms
             anchorOrigin: {
-              vertical: 'top', // top bottom
-              horizontal: 'center', // left center right
+              vertical: "top", // top bottom
+              horizontal: "center", // left center right
             },
-            variant: 'error', // success error info warning null
+            variant: "error", // success error info warning null
           })
         );
       });
@@ -267,8 +273,12 @@ export function TicketDetailSetting() {
           </Toolbar>
         </AppBar>
 
-        <form noValidate onSubmit={handleSubmit(onSubmit)} className="flex flex-col md:overflow-hidden">
-          <DialogContent classes={{ root: 'p-24' }}>
+        <form
+          noValidate
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col md:overflow-hidden"
+        >
+          <DialogContent classes={{ root: "p-24" }}>
             <div className="flex">
               {/* <div className="min-w-48 pt-20">
               <Icon color="action">account_circle</Icon>
@@ -295,7 +305,12 @@ export function TicketDetailSetting() {
 
           <DialogActions className="justify-between p-4 pb-16">
             <div className="px-16">
-              <Button variant="contained" color="secondary" type="submit" disabled={_.isEmpty(dirtyFields) || !isValid}>
+              <Button
+                variant="contained"
+                color="secondary"
+                type="submit"
+                disabled={_.isEmpty(dirtyFields) || !isValid}
+              >
                 Save
               </Button>
             </div>
@@ -331,14 +346,14 @@ export function ChatFollowupSetting(props) {
 
   return (
     <>
-      <div className="flex flex-col" style={{ margin: '10px' }}>
+      <div className="flex flex-col" style={{ margin: "10px" }}>
         <FormControlLabel
           control={
             <Checkbox
               checked={chat.followup}
               onChange={handleFollowup}
               inputProps={{
-                'aria-label': 'primary checkbox',
+                "aria-label": "primary checkbox",
               }}
             />
           }
@@ -346,7 +361,11 @@ export function ChatFollowupSetting(props) {
         />
         <FormControlLabel
           control={
-            <Checkbox checked={chat.spam} onChange={handleSpam} inputProps={{ 'aria-label': 'primary checkbox' }} />
+            <Checkbox
+              checked={chat.spam}
+              onChange={handleSpam}
+              inputProps={{ "aria-label": "primary checkbox" }}
+            />
           }
           label="Spam"
         />
@@ -361,7 +380,7 @@ export function OpenHistoryButton(props) {
   const chat = useSelector(({ chatApp }) => chatApp.current.selected);
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
 
   function openHistory() {
     props.handleClose();
@@ -372,7 +391,12 @@ export function OpenHistoryButton(props) {
     <>
       {/*  Button Open Dialog */}
       <div className="flex w-full items-center">
-        <Button className="m-8 " variant="contained" size="medium" onClick={openHistory}>
+        <Button
+          className="m-8 "
+          variant="contained"
+          size="medium"
+          onClick={openHistory}
+        >
           Open History
         </Button>
       </div>

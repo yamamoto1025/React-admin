@@ -1,5 +1,7 @@
-import { lazy } from 'react';
-import { authRoles } from 'app/auth';
+import { lazy } from "react";
+import { authRoles } from "app/auth";
+const Customer = lazy(() => import("./page/Customer"));
+const CustomersApp = lazy(() => import("./CustomersApp"));
 
 const CustomersAppConfig = {
   settings: {
@@ -10,12 +12,12 @@ const CustomersAppConfig = {
   auth: authRoles.user, // ['admin']
   routes: [
     {
-      path: '/customers/:customerId',
-      component: lazy(() => import('./page/Customer')),
+      path: "/customers/:customerId",
+      element: <Customer></Customer>,
     },
     {
-      path: '/customers',
-      component: lazy(() => import('./CustomersApp')),
+      path: "/customers",
+      element: <CustomersApp></CustomersApp>,
     },
   ],
 };

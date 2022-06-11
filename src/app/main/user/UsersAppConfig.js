@@ -1,5 +1,7 @@
-import { lazy } from 'react';
-import { authRoles } from 'app/auth';
+import { lazy } from "react";
+import { authRoles } from "app/auth";
+
+const UserApp = lazy(() => import("./UsersApp"));
 
 const UsersAppConfig = {
   settings: {
@@ -10,8 +12,8 @@ const UsersAppConfig = {
   auth: authRoles.user,
   routes: [
     {
-      path: '/users',
-      component: lazy(() => import('./UsersApp')),
+      path: "/users",
+      element: <UserApp></UserApp>,
     },
     // {
     //   path: '/apps/users/:id',

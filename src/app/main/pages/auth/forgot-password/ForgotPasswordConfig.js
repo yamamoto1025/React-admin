@@ -1,5 +1,5 @@
-import { lazy } from 'react';
-import { authRoles } from 'app/auth';
+import ForgotPasswordPage from "./ForgotPasswordPage";
+import authRoles from "app/auth/authRoles";
 
 const ForgotPasswordConfig = {
   settings: {
@@ -26,8 +26,8 @@ const ForgotPasswordConfig = {
   auth: authRoles.onlyGuest,
   routes: [
     {
-      path: '/forgot-password',
-      component: lazy(() => import('./ForgotPassword')),
+      path: "forgot-password",
+      element: <ForgotPasswordPage />,
     },
   ],
 };

@@ -1,4 +1,7 @@
-import { lazy } from 'react';
+import { lazy } from "react";
+
+const Board = lazy(() => import("./board/Board"));
+const Boards = lazy(() => import("./boards/Boards"));
 
 const ScrumboardAppConfig = {
   settings: {
@@ -6,12 +9,12 @@ const ScrumboardAppConfig = {
   },
   routes: [
     {
-      path: '/apps/boarddetail/:boardId/:boardUri?',
-      component: lazy(() => import('./board/Board')),
+      path: "/apps/boarddetail/:boardId/:boardUri",
+      element: <Board></Board>,
     },
     {
-      path: '/apps/scrumboard/boards',
-      component: lazy(() => import('./boards/Boards')),
+      path: "/apps/scrumboard/boards",
+      element: <Boards></Boards>,
     },
     // {
     //   path: '/apps/scrumboard',

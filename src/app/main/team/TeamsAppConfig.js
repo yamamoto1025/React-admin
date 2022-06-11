@@ -1,5 +1,7 @@
-import { lazy } from 'react';
-import { authRoles } from 'app/auth';
+import { lazy } from "react";
+import { authRoles } from "app/auth";
+
+const TeamsApp = lazy(() => import("./TeamsApp"));
 
 const CustomersAppConfig = {
   settings: {
@@ -10,8 +12,8 @@ const CustomersAppConfig = {
   auth: authRoles.user, // ['admin']
   routes: [
     {
-      path: '/teams/',
-      component: lazy(() => import('./TeamsApp')),
+      path: "/teams/",
+      element: <TeamsApp></TeamsApp>,
     },
   ],
 };

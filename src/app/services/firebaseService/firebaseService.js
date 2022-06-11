@@ -1,15 +1,17 @@
 /* eslint import/no-extraneous-dependencies: off */
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/messaging';
-import 'firebase/compat/database';
-import config, { firebaseVapidKey } from './firebaseServiceConfig';
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/messaging";
+import "firebase/compat/database";
+import config, { firebaseVapidKey } from "./firebaseServiceConfig";
 
 class FirebaseService {
   init(success) {
     if (Object.entries(config).length === 0 && config.constructor === Object) {
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('Missing Firebase Configuration at src/app/services/firebaseService/firebaseServiceConfig.js');
+      if (process.env.NODE_ENV === "development") {
+        console.warn(
+          "Missing Firebase Configuration at src/app/services/firebaseService/firebaseServiceConfig.js"
+        );
       }
       success(false);
       return;
@@ -78,17 +80,19 @@ class FirebaseService {
         })
         .then((currentToken) => {
           if (currentToken) {
-            console.info('Registration token available.');
+            console.info("Registration token available.");
             resolve(currentToken);
           } else {
             // Show permission request UI
-            console.info('No registration token available. Request permission to generate one.');
+            console.info(
+              "No registration token available. Request permission to generate one."
+            );
             // ...
             resolve();
           }
         })
         .catch((err) => {
-          console.error('An error occurred while retrieving token. ', err);
+          console.error("An error occurred while retrieving token. ", err);
           reject(err);
         });
     });

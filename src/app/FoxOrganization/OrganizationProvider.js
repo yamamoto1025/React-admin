@@ -1,11 +1,11 @@
-import React, { createContext, useReducer } from 'react';
-import usePersistedState from '../usePersistedState';
+import React, { createContext, useReducer } from "react";
+import usePersistedState from "../usePersistedState";
 
 export const OrganizationContext = React.createContext({});
 
 export const OrganizationProvider = ({ children }) => {
   const [currentOrganization, setCurrentOrganization] = usePersistedState(
-    'currentOrganization',
+    "currentOrganization",
     null
   );
 

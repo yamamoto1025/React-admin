@@ -1,17 +1,17 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import firebase from 'firebase/compat/app';
-import { showMessage } from 'app/store/fuse/messageSlice';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import firebase from "firebase/compat/app";
+import { showMessage } from "app/store/fuse/messageSlice";
 
 export const getOrganization = createAsyncThunk(
-  'auth/organization/getOrganization',
+  "auth/organization/getOrganization",
   async (organizationId, { dispatch, getState }) => {
     try {
       const { token } = await firebase.auth().currentUser.getIdTokenResult();
       if (!token) return null;
       const response = await axios.get(`/api/organization`, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         params: {
@@ -22,7 +22,9 @@ export const getOrganization = createAsyncThunk(
       setOrganization(organization);
       return organization;
     } catch (error) {
-      dispatch(showMessage({ message: 'Get Organization error', variant: 'error' }));
+      dispatch(
+        showMessage({ message: "Get Organization error", variant: "error" })
+      );
       throw error;
     }
   }
@@ -31,7 +33,7 @@ export const getOrganization = createAsyncThunk(
 const initialState = {};
 
 const organizationSlice = createSlice({
-  name: 'auth/organization',
+  name: "auth/organization",
   initialState,
   reducers: {
     clearOrganization: (state, action) => initialState,

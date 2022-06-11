@@ -1,47 +1,54 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import firebase from 'firebase/compat/app';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import firebase from "firebase/compat/app";
 // import { getFoxUser } from 'app/auth/store/foxSlice';
-import { setUserData } from 'app/auth/store/userSlice';
-import _ from '@lodash';
-import { showMessage } from 'app/store/fuse/messageSlice';
+import { setUserData } from "app/auth/store/userSlice";
+import _ from "@lodash";
+import { showMessage } from "app/store/fuse/messageSlice";
 
-export const getChannels = createAsyncThunk('setting/channels/getChannels', async (params, { dispatch, getState }) => {
-  try {
-    const { token } = await firebase.auth().currentUser.getIdTokenResult();
-    if (!token) return null;
-    const { id: orgId } = getState().auth.organization.organization;
-    const channelResponse = await axios.get(`/api/${orgId}/channel/list`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const channels = await channelResponse.data;
-    if (channels && channels.length) {
-      const lineChannels = channels.filter((element) => element.channel === 'line');
-      if (lineChannels) {
-        dispatch(setLine(lineChannels));
-      }
+export const getChannels = createAsyncThunk(
+  "setting/channels/getChannels",
+  async (params, { dispatch, getState }) => {
+    try {
+      const { token } = await firebase.auth().currentUser.getIdTokenResult();
+      if (!token) return null;
+      const { id: orgId } = getState().auth.organization.organization;
+      const channelResponse = await axios.get(`/api/${orgId}/channel/list`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const channels = await channelResponse.data;
+      if (channels && channels.length) {
+        const lineChannels = channels.filter(
+          (element) => element.channel === "line"
+        );
+        if (lineChannels) {
+          dispatch(setLine(lineChannels));
+        }
 
-      const facebookChannels = channels.filter((element) => element.channel === 'facebook');
-      if (facebookChannels) {
-        dispatch(setFacebook(facebookChannels));
+        const facebookChannels = channels.filter(
+          (element) => element.channel === "facebook"
+        );
+        if (facebookChannels) {
+          dispatch(setFacebook(facebookChannels));
+        }
       }
+      return channels;
+    } catch (error) {
+      console.error("[setting/channel/getChannels] ", error);
+      return [];
     }
-    return channels;
-  } catch (error) {
-    console.error('[setting/channel/getChannels] ', error);
-    return [];
   }
-});
+);
 
 export const addLineChannel = createAsyncThunk(
-  'setting/channels/addChannel',
+  "setting/channels/addChannel",
   async (lineChanel, { dispatch, getState }) => {
     const body = {
       channel: {
-        channel: 'line',
+        channel: "line",
         line: {
           name: lineChanel.name,
           lineId: lineChanel.lineId,
@@ -55,7 +62,7 @@ export const addLineChannel = createAsyncThunk(
     const { id: orgId } = getState().auth.organization.organization;
     const response = await axios.post(`/api/${orgId}/channel`, body, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
@@ -65,13 +72,15 @@ export const addLineChannel = createAsyncThunk(
 
     dispatch(openEditLineChannelDialog(data));
 
-    dispatch(showMessage({ message: 'Create LINE channel', variant: 'success' }));
+    dispatch(
+      showMessage({ message: "Create LINE channel", variant: "success" })
+    );
     return data;
   }
 );
 
 export const updateLineChannel = createAsyncThunk(
-  'setting/channels/updateChannel',
+  "setting/channels/updateChannel",
   async (channel, { dispatch, getState }) => {
     const { token } = await firebase.auth().currentUser.getIdTokenResult();
     if (!token) return null;
@@ -81,7 +90,7 @@ export const updateLineChannel = createAsyncThunk(
       { channel },
       {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       }
@@ -95,17 +104,20 @@ export const updateLineChannel = createAsyncThunk(
 );
 
 export const removeLineChannel = createAsyncThunk(
-  'setting/channels/removeChannel',
+  "setting/channels/removeChannel",
   async (lineChanel, { dispatch, getState }) => {
     const { token } = await firebase.auth().currentUser.getIdTokenResult();
     if (!token) return null;
     const { id: orgId } = getState().auth.organization.organization;
-    const response = await axios.delete(`/api/${orgId}/channel?channel=line&id=${lineChanel.id}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.delete(
+      `/api/${orgId}/channel?channel=line&id=${lineChanel.id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     const data = await response.data;
 
     dispatch(getChannels());
@@ -115,7 +127,7 @@ export const removeLineChannel = createAsyncThunk(
 );
 
 export const addFacebookChannel = createAsyncThunk(
-  'setting/channels/addChannel',
+  "setting/channels/addChannel",
   async (facebookChanel, { dispatch, getState }) => {
     const { token } = await firebase.auth().currentUser.getIdTokenResult();
     if (!token) return null;
@@ -123,12 +135,12 @@ export const addFacebookChannel = createAsyncThunk(
     const { id: orgId } = getState().auth.organization.organization;
 
     const body = {
-      channel: 'facebook',
+      channel: "facebook",
       data: facebookChanel,
     };
     const response = await axios.post(`/api/${orgId}/channel`, body, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
@@ -141,10 +153,10 @@ export const addFacebookChannel = createAsyncThunk(
 );
 
 export const removeFacebookChannel = createAsyncThunk(
-  'setting/channels/removeChannel',
+  "setting/channels/removeChannel",
   async (channel, { dispatch, getState }) => {
     try {
-      console.log('Remove facebook ', channel);
+      console.log("Remove facebook ", channel);
       const { token } = await firebase.auth().currentUser.getIdTokenResult();
       if (!token) return null;
       const { id: orgId } = getState().auth.organization.organization;
@@ -155,31 +167,38 @@ export const removeFacebookChannel = createAsyncThunk(
             Authorization: `Bearer ${channel.facebook.accessToken}`,
           },
           params: {
-            subscribed_fields: 'messages',
+            subscribed_fields: "messages",
           },
         }
       );
-      if (currentSubscribeResult && currentSubscribeResult.data && currentSubscribeResult.data.data.length > 0) {
+      if (
+        currentSubscribeResult &&
+        currentSubscribeResult.data &&
+        currentSubscribeResult.data.data.length > 0
+      ) {
         // need remove subscribe from facebook
         const fields = currentSubscribeResult.data.data[0].subscribed_fields;
-        await axios.delete(`https://graph.facebook.com/v12.0/${channel.facebook.pageId}/subscribed_apps`, {
-          headers: {
-            Authorization: `Bearer ${channel.facebook.accessToken}`,
-          },
-          params: {
-            subscribed_fields: fields,
-          },
-        });
+        await axios.delete(
+          `https://graph.facebook.com/v12.0/${channel.facebook.pageId}/subscribed_apps`,
+          {
+            headers: {
+              Authorization: `Bearer ${channel.facebook.accessToken}`,
+            },
+            params: {
+              subscribed_fields: fields,
+            },
+          }
+        );
       }
 
       // console.log('facebook page ', subscribeResult);
       const response = await axios.delete(`/api/${orgId}/channel`, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         params: {
-          channel: 'facebook',
+          channel: "facebook",
           id: channel.id,
         },
       });
@@ -187,17 +206,24 @@ export const removeFacebookChannel = createAsyncThunk(
 
       dispatch(getChannels());
 
-      dispatch(showMessage({ message: 'Remove Facebook channel', variant: 'success' }));
+      dispatch(
+        showMessage({ message: "Remove Facebook channel", variant: "success" })
+      );
       return data;
     } catch (error) {
-      dispatch(showMessage({ message: 'Remove Facebook channel error', variant: 'error' }));
+      dispatch(
+        showMessage({
+          message: "Remove Facebook channel error",
+          variant: "error",
+        })
+      );
       throw error;
     }
   }
 );
 
 export const addFacebookUserTokenChannel = createAsyncThunk(
-  'setting/channels/addFacebookUserTokenChannel',
+  "setting/channels/addFacebookUserTokenChannel",
   async (facebookToken, { dispatch, getState }) => {
     const { token } = await firebase.auth().currentUser.getIdTokenResult();
     if (!token) return null;
@@ -208,7 +234,7 @@ export const addFacebookUserTokenChannel = createAsyncThunk(
       { user: { id, facebookToken } },
       {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       }
@@ -225,7 +251,7 @@ export const addFacebookUserTokenChannel = createAsyncThunk(
   }
 );
 export const removeFacebookUserTokenChannel = createAsyncThunk(
-  'setting/channels/removeFacebookUserTokenChannel',
+  "setting/channels/removeFacebookUserTokenChannel",
   async (params, { dispatch, getState }) => {
     const { token } = await firebase.auth().currentUser.getIdTokenResult();
     if (!token) return null;
@@ -233,10 +259,10 @@ export const removeFacebookUserTokenChannel = createAsyncThunk(
     const { id: orgId } = getState().auth.organization.organization;
     const response = await axios.put(
       `/api/${orgId}/user`,
-      { user: { id, facebookToken: '' } },
+      { user: { id, facebookToken: "" } },
       {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       }
@@ -253,13 +279,13 @@ export const removeFacebookUserTokenChannel = createAsyncThunk(
 );
 
 const channelsSlice = createSlice({
-  name: 'setting/channels',
+  name: "setting/channels",
   initialState: {
     line: null,
     facebook: null,
     channelDialog: {
       channel: null,
-      type: 'new',
+      type: "new",
       line: {
         props: {
           open: false,
@@ -283,8 +309,8 @@ const channelsSlice = createSlice({
 
     openNewLineChannelDialog: (state, action) => {
       state.channelDialog = {
-        channel: 'line',
-        type: 'new',
+        channel: "line",
+        type: "new",
         line: {
           props: {
             open: true,
@@ -301,7 +327,7 @@ const channelsSlice = createSlice({
     closeNewLineChannelDialog: (state, action) => {
       state.channelDialog = {
         channel: null,
-        type: 'new',
+        type: "new",
         line: {
           props: {
             open: false,
@@ -318,8 +344,8 @@ const channelsSlice = createSlice({
 
     openNewFacebookChannelDialog: (state, action) => {
       state.channelDialog = {
-        channel: 'facebook',
-        type: 'new',
+        channel: "facebook",
+        type: "new",
         line: {
           props: {
             open: false,
@@ -336,7 +362,7 @@ const channelsSlice = createSlice({
     closeNewFacebookChannelDialog: (state, action) => {
       state.channelDialog = {
         channel: null,
-        type: 'new',
+        type: "new",
         line: {
           props: {
             open: false,
@@ -352,8 +378,8 @@ const channelsSlice = createSlice({
     },
     openEditLineChannelDialog: (state, action) => {
       state.channelDialog = {
-        channel: 'line',
-        type: 'edit',
+        channel: "line",
+        type: "edit",
         line: {
           props: {
             open: true,
@@ -370,7 +396,7 @@ const channelsSlice = createSlice({
     closeEditLineChannelDialog: (state, action) => {
       state.channelDialog = {
         channel: null,
-        type: 'edit',
+        type: "edit",
         line: {
           props: {
             open: false,
@@ -386,8 +412,8 @@ const channelsSlice = createSlice({
     },
     openEditFacebookChannelDialog: (state, action) => {
       state.channelDialog = {
-        channel: 'facebook',
-        type: 'edit',
+        channel: "facebook",
+        type: "edit",
         line: {
           props: {
             open: false,
@@ -404,7 +430,7 @@ const channelsSlice = createSlice({
     closeEditFacebookChannelDialog: (state, action) => {
       state.channelDialog = {
         channel: null,
-        type: 'edit',
+        type: "edit",
         line: {
           props: {
             open: false,

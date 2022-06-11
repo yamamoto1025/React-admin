@@ -1,22 +1,38 @@
-import { lazy } from 'react';
-import { Redirect } from 'react-router-dom';
+import { lazy } from "react";
+import { Navigate } from "react-router-dom";
+
+const TodoApp = lazy(() => import("./TodoApp"));
 
 const TodoAppConfig = {
   settings: {
     layout: {},
   },
   routes: [
+    // {
+    //   path: "/apps/todo/:filter/:label/:todoId",
+    //   // '/apps/todo/:folder/:todoId?',
+    //   element: <TodoApp></TodoApp>,
+    // },
+    // {
+    //   path: "/apps/todo/:filter/:todoId",
+    //   element: <TodoApp></TodoApp>,
+    // },
     {
-      path: [
-        '/apps/todo/:filter/:label/:todoId?',
-        '/apps/todo/:filter/:todoId?',
-        // '/apps/todo/:folder/:todoId?',
+      path: "/apps/todo",
+      children: [
+        {
+          path: "",
+          element: <Navigate to="all"></Navigate>,
+        },
+        {
+          path: ":filter",
+          element: <TodoApp></TodoApp>,
+        },
+        {
+          path: "label/:todoId",
+          element: <TodoApp></TodoApp>,
+        },
       ],
-      component: lazy(() => import('./TodoApp')),
-    },
-    {
-      path: '/apps/todo',
-      component: () => <Redirect to="/apps/todo/all" />,
     },
   ],
 };

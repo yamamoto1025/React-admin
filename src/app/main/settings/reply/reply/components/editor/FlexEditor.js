@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { Paper, TextareaAutosize } from '@mui/material';
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Paper, TextareaAutosize } from "@mui/material";
 
-import { editResponseUnsaved } from '../../../store/responseSlice';
+import { editResponseUnsaved } from "../../../store/responseSlice";
 
 function FlexEditor(props) {
   const dispatch = useDispatch();
@@ -17,7 +17,7 @@ function FlexEditor(props) {
     return true;
   }
   useEffect(() => {
-    if (response && response.type && response.type === 'flex') {
+    if (response && response.type && response.type === "flex") {
       const data = JSON.parse(response.data);
       if (data && data.flex) {
         if (isJson(data.flex)) {
@@ -26,7 +26,7 @@ function FlexEditor(props) {
           setFlexValue(data.flex);
         }
       } else {
-        setFlexValue('');
+        setFlexValue("");
       }
     }
   }, [response]);
@@ -34,7 +34,7 @@ function FlexEditor(props) {
   const onFlexChange = (input) => {
     const { value } = input.target;
     // console.log('Value: ', value);
-    let newFlexData = { flex: '{}' };
+    let newFlexData = { flex: "{}" };
     setFlexValue(value);
     if (isJson(value)) {
       newFlexData = JSON.stringify({ flex: JSON.stringify(JSON.parse(value)) });
@@ -47,7 +47,6 @@ function FlexEditor(props) {
     // const newFlex = { flex: value };
     // console.log(value);
     const newData = { ...response, data: newFlexData };
-    console.log(newData);
 
     dispatch(editResponseUnsaved({ index: responseIndex, response: newData }));
   };

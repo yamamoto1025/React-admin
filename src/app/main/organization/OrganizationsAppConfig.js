@@ -1,5 +1,6 @@
-import { authRoles } from 'app/auth';
-import { lazy } from 'react';
+import { authRoles } from "app/auth";
+import { lazy } from "react";
+import OrganizationsApp from "./OrganizationsApp";
 
 const OrganizationsAppConfig = {
   settings: {
@@ -26,8 +27,8 @@ const OrganizationsAppConfig = {
   auth: authRoles.user,
   routes: [
     {
-      path: '/organization',
-      component: lazy(() => import('./OrganizationsApp')),
+      path: "/organization",
+      element: <OrganizationsApp></OrganizationsApp>,
     },
   ],
 };

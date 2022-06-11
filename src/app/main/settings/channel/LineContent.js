@@ -1,29 +1,32 @@
-import Button from '@mui/material/Button';
-import Icon from '@mui/material/Icon';
-import Paper from '@mui/material/Paper';
-import makeStyles from '@mui/styles/makeStyles';
-import Typography from '@mui/material/Typography';
-import { useDispatch, useSelector } from 'react-redux';
+import Button from "@mui/material/Button";
+import Icon from "@mui/material/Icon";
+import Paper from "@mui/material/Paper";
+import makeStyles from "@mui/styles/makeStyles";
+import Typography from "@mui/material/Typography";
+import { useDispatch, useSelector } from "react-redux";
 
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import IconButton from '@mui/material/IconButton';
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import IconButton from "@mui/material/IconButton";
 
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
-import format from 'date-fns/format';
+import format from "date-fns/format";
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState } from "react";
 
-import { openEditLineChannelDialog, removeLineChannel } from './store/channelsSlice';
+import {
+  openEditLineChannelDialog,
+  removeLineChannel,
+} from "./store/channelsSlice";
 
 const useStyles = makeStyles({
   card: {
@@ -76,9 +79,13 @@ function LineContent(props) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Are you sure you want to delete this Channel?</DialogTitle>
+        <DialogTitle id="alert-dialog-title">
+          Are you sure you want to delete this Channel?
+        </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">{removeConfirm.data.name}</DialogContentText>
+          <DialogContentText id="alert-dialog-description">
+            {removeConfirm.data.name}
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleConfirmClose} color="primary">
@@ -112,7 +119,7 @@ function LineContent(props) {
                 <TableBody>
                   {line.map((row) => (
                     <TableRow
-                      key={row.name}
+                      key={row.id}
                       onClick={() => {
                         if (row) {
                           // console.log(row);
@@ -124,8 +131,12 @@ function LineContent(props) {
                         {row.line.name}
                       </TableCell>
                       <TableCell>{row.status}</TableCell>
-                      <TableCell>{format(new Date(row.createdAt), 'PP')}</TableCell>
-                      <TableCell>{format(new Date(row.updatedAt), 'PP')}</TableCell>
+                      <TableCell>
+                        {format(new Date(row.createdAt), "PP")}
+                      </TableCell>
+                      <TableCell>
+                        {format(new Date(row.updatedAt), "PP")}
+                      </TableCell>
                       <TableCell>
                         {/* <Switch
                         checked={row.status === 'active'}

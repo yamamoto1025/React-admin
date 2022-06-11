@@ -1,5 +1,5 @@
 // import Typography from '@mui/material/Typography';
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 
 // import { useEffect, useState } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';
@@ -18,8 +18,8 @@ import { motion } from 'framer-motion';
 // import { yupResolver } from '@hookform/resolvers/yup';
 
 // import { updateOrganization } from './store/generalSlice';
-import WorkingHoursSetting from './components/WorkingHoursSetting';
-import MotopressSetting from './components/MotopressSetting';
+import WorkingHoursSetting from "./components/WorkingHoursSetting";
+import MotopressSetting from "./components/MotopressSetting";
 
 function GeneralPageContent() {
   const container = {

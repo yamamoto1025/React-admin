@@ -1,12 +1,12 @@
-import { useDispatch, useSelector } from 'react-redux';
-import Icon from '@mui/material/Icon';
-import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import { motion } from 'framer-motion';
-import { useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import Icon from "@mui/material/Icon";
+import MenuItem from "@mui/material/MenuItem";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import { motion } from "framer-motion";
+import { useEffect } from "react";
 
-import { selectUsers } from 'app/main/user/store/usersSlice';
+import { selectUsers } from "app/main/user/store/usersSlice";
 
 function TodoSidebarHeader({ selectedAccount, setSelectedCount }) {
   const dispatch = useDispatch();
@@ -14,7 +14,12 @@ function TodoSidebarHeader({ selectedAccount, setSelectedCount }) {
   const accounts = useSelector(selectUsers);
 
   useEffect(() => {
-    setSelectedCount(accounts.find((element) => element.user.email === currentUser.email).user.id);
+    const account = accounts.find(
+      (element) => element.user.email === currentUser.email
+    );
+    if (account) {
+      setSelectedCount(account.user.id);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser, accounts]);
 
@@ -44,12 +49,18 @@ function TodoSidebarHeader({ selectedAccount, setSelectedCount }) {
         </Typography>
       </div>
 
-      <motion.div initial={{ y: 20, opacity: 0.8 }} animate={{ y: 0, opacity: 1, transition: { delay: 0.3 } }}>
+      <motion.div
+        initial={{ y: 20, opacity: 0.8 }}
+        animate={{ y: 0, opacity: 1, transition: { delay: 0.3 } }}
+      >
         <TextField
           id="account-selection"
-          sx={{ width: '-webkit-fill-available' }}
+          sx={{ width: "-webkit-fill-available" }}
           select
-          label={accounts.find((element) => element.user.id === selectedAccount)?.user?.display}
+          label={
+            accounts.find((element) => element.user.id === selectedAccount)
+              ?.user?.display
+          }
           value={selectedAccount}
           onChange={handleAccountChange}
           placeholder="Select Account"

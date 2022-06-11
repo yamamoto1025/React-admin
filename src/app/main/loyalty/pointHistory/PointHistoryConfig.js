@@ -1,5 +1,7 @@
-import { lazy } from 'react';
-import { authRoles } from 'app/auth';
+import { lazy } from "react";
+import { authRoles } from "app/auth";
+
+const PointHistory = lazy(() => import("./PointHistory"));
 
 const PointHistoryConfig = {
   settings: {
@@ -10,8 +12,8 @@ const PointHistoryConfig = {
   auth: authRoles.user, // ['admin']
   routes: [
     {
-      path: '/pointHistory',
-      component: lazy(() => import('./PointHistory')),
+      path: "/pointHistory",
+      element: <PointHistory></PointHistory>,
     },
   ],
 };

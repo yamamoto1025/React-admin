@@ -1,38 +1,51 @@
-import { useContext, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useContext, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
-import { getOrganization, setOrganization } from 'app/auth/store/organizationSlice';
+import {
+  getOrganization,
+  setOrganization,
+} from "../auth/store/organizationSlice";
 
-import { OrganizationContext } from './OrganizationProvider';
+import { OrganizationContext } from "./OrganizationProvider";
 
 const FoxOrganization = (props) => {
-  const { location, history } = props;
+  const location = useLocation();
+  const navigate = useNavigate();
   const { pathname, state } = location;
   const { children } = props;
   const organizationContext = useContext(OrganizationContext);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (pathname !== '/login' && pathname !== '/register' && pathname !== '/forgot-password') {
-      if (!organizationContext.currentOrganization && pathname !== '/organization') {
-        console.info('No Organization detected, redirecting');
-        history.push({
-          pathname: '/organization',
-          state: { redirectUrl: pathname },
+    if (
+      pathname !== "/sign-in" &&
+      pathname !== "/sign-out" &&
+      pathname !== "/forgot-password"
+    ) {
+      if (
+        !organizationContext.currentOrganization &&
+        pathname !== "/organization"
+      ) {
+        console.info("No Organization detected, redirecting");
+        navigate("/organization", {
+          state: {
+            pathname: "/organization",
+          },
         });
       } else {
-        history.location.state = {
-          redirectUrl: pathname,
-        };
-        console.info('Organization detected');
-
+        //history.location.pathname = pathname;
+        console.info("Organization detected");
         if (
           organizationContext.currentOrganization &&
           organizationContext.currentOrganization.organization &&
           organizationContext.currentOrganization.organization.id
         ) {
-          dispatch(getOrganization(organizationContext.currentOrganization.organization.id)).then((result) => {
+          dispatch(
+            getOrganization(
+              organizationContext.currentOrganization.organization.id
+            )
+          ).then((result) => {
             if (result && result.payload) {
               organizationContext.setCurrentOrganization(result.payload);
               dispatch(setOrganization(result.payload));
@@ -46,4 +59,4 @@ const FoxOrganization = (props) => {
   return <>{children}</>;
 };
 
-export default withRouter(FoxOrganization);
+export default FoxOrganization;

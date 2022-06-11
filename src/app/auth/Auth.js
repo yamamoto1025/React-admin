@@ -1,16 +1,19 @@
-import FuseSplashScreen from '@fuse/core/FuseSplashScreen';
-import firebaseService from 'app/services/firebaseService';
-import { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from '@reduxjs/toolkit';
+import FuseSplashScreen from "@fuse/core/FuseSplashScreen";
+import firebaseService from "app/services/firebaseService";
+import { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "@reduxjs/toolkit";
+import axios from "axios";
 
-import axios from 'axios';
+import { hideMessage, showMessage } from "app/store/fuse/messageSlice";
+import {
+  setUserDataFoxConnect,
+  setUserData,
+  logoutUser,
+} from "./store/userSlice";
 
-import { hideMessage, showMessage } from 'app/store/fuse/messageSlice';
-
-import { setUserDataFoxConnect, setUserData, logoutUser } from './store/userSlice';
-
-import { OrganizationContext } from '../FoxOrganization/OrganizationProvider';
+import { OrganizationContext } from "../FoxOrganization/OrganizationProvider";
+import withRouter from "@fuse/core/withRouter";
 
 class Auth extends Component {
   state = {
@@ -37,7 +40,7 @@ class Auth extends Component {
       firebaseService.onIdTokenChanged((authUser) => {
         if (authUser) {
           // this.props.showMessage({ message: 'Logging in with Firebase' });
-          console.log('[Auth] Logging in with Firebase');
+          console.log("[Auth] Logging in with Firebase");
 
           /**
            * Retrieve user data from FoxService
@@ -51,28 +54,37 @@ class Auth extends Component {
                 this.context.currentOrganization.organization.id
               ) {
                 axios
-                  .get(`/api/${this.context.currentOrganization.organization.id}/user`, {
-                    headers: {
-                      'Content-Type': 'application/json',
-                      Authorization: `Bearer ${idToken}`,
-                    },
-                    params: {
-                      email: authUser.email,
-                    },
-                  })
+                  .get(
+                    `/api/${this.context.currentOrganization.organization.id}/user`,
+                    {
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${idToken}`,
+                      },
+                      params: {
+                        email: authUser.email,
+                      },
+                    }
+                  )
                   .then((response) => {
-                    this.props.setUserDataFoxConnect(response.data.user, authUser, response.data.role).then(() => {
-                      resolve();
-                      // this.props.showMessage({
-                      //   message: 'Logged in with Firebase',
-                      // });
-                      console.log('[Auth] Logged in with Firebase');
-                    });
+                    this.props
+                      .setUserDataFoxConnect(
+                        response.data.user,
+                        authUser,
+                        response.data.role
+                      )
+                      .then(() => {
+                        resolve();
+                        // this.props.showMessage({
+                        //   message: 'Logged in with Firebase',
+                        // });
+                        console.log("[Auth] Logged in with Firebase");
+                      });
 
                     resolve();
                   })
                   .catch((error) => {
-                    console.log('[Auth] Get User error ', error);
+                    console.log("[Auth] Get User error ", error);
                     // this.props.showMessage({
                     //   message: 'Service Unavailable',
                     //   variant: 'error',
@@ -83,20 +95,24 @@ class Auth extends Component {
                 axios
                   .get(`/api/user`, {
                     headers: {
-                      'Content-Type': 'application/json',
+                      "Content-Type": "application/json",
                       Authorization: `Bearer ${idToken}`,
                     },
                   })
                   .then((response) => {
-                    this.props.setUserDataFoxConnect(response.data, authUser, 'user');
-                    console.log('[Auth] Logged in with Firebase');
+                    this.props.setUserDataFoxConnect(
+                      response.data,
+                      authUser,
+                      "user"
+                    );
+                    console.log("[Auth] Logged in with Firebase");
                     resolve();
                     // this.props.showMessage({
                     //   message: 'Logged in with Firebase',
                     // });
                   })
                   .catch((error) => {
-                    console.log('[Auth] Get User error ', error);
+                    console.log("[Auth] Get User error ", error);
                     // this.props.showMessage({
                     //   message: 'Service Unavailable',
                     //   variant: 'error',
@@ -106,11 +122,11 @@ class Auth extends Component {
               }
             })
             .catch((error) => {
-              console.error('[Auth] getIdToken: ', error);
+              console.error("[Auth] getIdToken: ", error);
               resolve();
             });
         } else {
-          console.log('[Auth] No AuthUser');
+          console.log("[Auth] No AuthUser");
           resolve();
         }
       });
@@ -119,7 +135,11 @@ class Auth extends Component {
     });
 
   render() {
-    return this.state.waitAuthCheck ? <FuseSplashScreen /> : <>{this.props.children}</>;
+    return this.state.waitAuthCheck ? (
+      <FuseSplashScreen />
+    ) : (
+      <>{this.props.children}</>
+    );
   }
 }
 
@@ -138,4 +158,4 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(null, mapDispatchToProps)(Auth);
+export default connect(null, mapDispatchToProps)(withRouter(Auth));

@@ -1,5 +1,6 @@
-import { lazy } from 'react';
-import { authRoles } from 'app/auth';
+import { lazy } from "react";
+import { authRoles } from "app/auth";
+import ChatApp from "./ChatApp";
 
 const ChatAppConfig = {
   settings: {
@@ -10,8 +11,8 @@ const ChatAppConfig = {
   auth: authRoles.user,
   routes: [
     {
-      path: '/apps/chat',
-      component: lazy(() => import('./ChatApp')),
+      path: "/apps/chat",
+      element: <ChatApp />,
     },
   ],
 };

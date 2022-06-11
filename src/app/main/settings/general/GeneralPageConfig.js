@@ -1,5 +1,7 @@
-import { lazy } from 'react';
-import { authRoles } from 'app/auth';
+import { lazy } from "react";
+import { authRoles } from "app/auth";
+
+const GeneralPage = lazy(() => import("./GeneralPage"));
 
 const GeneralPageConfig = {
   settings: {
@@ -11,8 +13,8 @@ const GeneralPageConfig = {
   auth: authRoles.admin,
   routes: [
     {
-      path: '/settings/general',
-      component: lazy(() => import('./GeneralPage')),
+      path: "/settings/general",
+      element: <GeneralPage></GeneralPage>,
     },
   ],
 };

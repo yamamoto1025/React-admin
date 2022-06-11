@@ -1,68 +1,75 @@
-import FuseAuthorization from '@fuse/core/FuseAuthorization';
-import FuseLayout from '@fuse/core/FuseLayout';
-import FuseTheme from '@fuse/core/FuseTheme';
-import history from '@history';
-import { Router } from 'react-router-dom';
-import { SnackbarProvider } from 'notistack';
-import { useSelector } from 'react-redux';
-import rtlPlugin from 'stylis-plugin-rtl';
-import createCache from '@emotion/cache';
-import { CacheProvider } from '@emotion/react';
-import { selectCurrLangDir } from 'app/store/i18nSlice';
-import axios from 'axios';
-import withAppProviders from './withAppProviders';
-import { Auth } from './auth';
+import "@mock-api";
+import BrowserRouter from "@fuse/core/BrowserRouter";
+import FuseLayout from "@fuse/core/FuseLayout";
+import FuseTheme from "@fuse/core/FuseTheme";
+import { SnackbarProvider } from "notistack";
+import { useSelector } from "react-redux";
+import rtlPlugin from "stylis-plugin-rtl";
+import createCache from "@emotion/cache";
+import { CacheProvider } from "@emotion/react";
+import { selectCurrentLanguageDirection } from "app/store/i18nSlice";
+import themeLayouts from "app/theme-layouts/themeLayouts";
+import { selectMainTheme } from "app/store/fuse/settingsSlice";
+import FuseAuthorization from "@fuse/core/FuseAuthorization";
+import settingsConfig from "app/configs/settingsConfig";
+import withAppProviders from "./withAppProviders";
+import history from "@history";
 
-import FoxOrganization from './FoxOrganization/FoxOrganization';
-import { OrganizationProvider } from './FoxOrganization/OrganizationProvider';
+import FoxOrganization from "./FoxOrganization/FoxOrganization";
+import { OrganizationProvider } from "./FoxOrganization/OrganizationProvider";
+import { Auth } from "./auth";
+
+import axios from "axios";
 /**
  * Axios HTTP Request defaults
  */
-axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
-// axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.defaults.baseURL = "https://foxservice-dev-wbew5dl5hq-as.a.run.app";
+axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
+//axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
 
 const emotionCacheOptions = {
   rtl: {
-    key: 'muirtl',
+    key: "muirtl",
     stylisPlugins: [rtlPlugin],
-    prepend: true,
+    insertionPoint: document.getElementById("emotion-insertion-point"),
   },
   ltr: {
-    key: 'muiltr',
+    key: "muiltr",
     stylisPlugins: [],
-    prepend: true,
+    insertionPoint: document.getElementById("emotion-insertion-point"),
   },
 };
 
 const App = () => {
-  const langDirection = useSelector(selectCurrLangDir);
+  const langDirection = useSelector(selectCurrentLanguageDirection);
+  const mainTheme = useSelector(selectMainTheme);
 
   return (
     <CacheProvider value={createCache(emotionCacheOptions[langDirection])}>
       <OrganizationProvider>
-        <Auth>
-          <Router history={history}>
+        <BrowserRouter>
+          <Auth>
             <FoxOrganization>
               <FuseAuthorization>
-                <FuseTheme>
+                <FuseTheme theme={mainTheme} direction={langDirection}>
                   <SnackbarProvider
                     maxSnack={5}
                     anchorOrigin={{
-                      vertical: 'bottom',
-                      horizontal: 'right',
+                      vertical: "bottom",
+                      horizontal: "right",
                     }}
                     classes={{
-                      containerRoot: 'bottom-0 right-0 mb-52 md:mb-68 mr-8 lg:mr-80 z-99',
+                      containerRoot:
+                        "bottom-0 right-0 mb-52 md:mb-68 mr-8 lg:mr-80 z-99",
                     }}
                   >
-                    <FuseLayout />
+                    <FuseLayout layouts={themeLayouts} />
                   </SnackbarProvider>
                 </FuseTheme>
               </FuseAuthorization>
             </FoxOrganization>
-          </Router>
-        </Auth>
+          </Auth>
+        </BrowserRouter>
       </OrganizationProvider>
     </CacheProvider>
   );

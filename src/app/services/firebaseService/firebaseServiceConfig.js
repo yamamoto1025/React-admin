@@ -1,4 +1,4 @@
-console.info('[Firebase Config] ', process.env.REACT_APP_ENVIRONMENT);
+console.info("[Firebase Config] ", "development");
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -10,6 +10,18 @@ const config = {
   appId: process.env.REACT_APP_APP_ID,
 };
 
-export const firebaseVapidKey = process.env.REACT_APP_FIREBASE_VAPID_KEY;
+// const config = {
+//   apiKey: "AIzaSyAoejYZofPPkk8gRoMHegixREXMpzW-epM",
+//   authDomain: "foxconnect-dev-329410.firebaseapp.com",
+//   databaseURL:
+//     "https://foxconnect-dev-329410-default-rtdb.asia-southeast1.firebasedatabase.app",
+//   projectId: "foxconnect-dev-329410",
+//   storageBucket: "foxconnect-dev-329410.appspot.com",
+//   messagingSenderId: 928457833966,
+//   appId: "1:928457833966:web:2ef66155ab54b5ae5a22ff",
+// };
+
+export const firebaseVapidKey =
+  "BOmivn5cz1VPEPPSYpcfc6G8PFSkUr_G5ex30QtF2XOVFurmmXPd_xanWLU7Xq0ESK22AReYxRLsq9E0YnsO758";
 
 export default config;

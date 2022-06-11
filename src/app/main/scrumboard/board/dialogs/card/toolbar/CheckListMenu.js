@@ -1,21 +1,21 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Controller, useForm } from 'react-hook-form';
-import Button from '@mui/material/Button';
-import Icon from '@mui/material/Icon';
-import IconButton from '@mui/material/IconButton';
-import TextField from '@mui/material/TextField';
-import { useEffect, useState } from 'react';
-import * as yup from 'yup';
-import _ from '@lodash';
-import { useDispatch, useSelector } from 'react-redux';
-import { newChecklist } from 'app/main/scrumboard/store/cardSlice';
-import ToolbarMenu from './ToolbarMenu';
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Controller, useForm } from "react-hook-form";
+import Button from "@mui/material/Button";
+import Icon from "@mui/material/Icon";
+import IconButton from "@mui/material/IconButton";
+import TextField from "@mui/material/TextField";
+import { useEffect, useState } from "react";
+import * as yup from "yup";
+import _ from "@lodash";
+import { useDispatch, useSelector } from "react-redux";
+import { newChecklist } from "app/main/scrumboard/store/cardSlice";
+import ToolbarMenu from "./ToolbarMenu";
 
 /**
  * Form Validation Schema
  */
 const schema = yup.object().shape({
-  name: yup.string().required('You must enter a title'),
+  name: yup.string().required("You must enter a title"),
 });
 
 function CheckListMenu(props) {
@@ -24,7 +24,7 @@ function CheckListMenu(props) {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const { control, formState, handleSubmit, reset } = useForm({
-    mode: 'onChange',
+    mode: "onChange",
     defaultValues: {
       name: props.name,
     },
@@ -50,7 +50,6 @@ function CheckListMenu(props) {
   }
 
   function onSubmit(data) {
-    console.log(data);
     dispatch(
       newChecklist({
         cardId: card.id,
@@ -70,7 +69,10 @@ function CheckListMenu(props) {
         <Icon>check_box</Icon>
       </IconButton>
       <ToolbarMenu state={anchorEl} onClose={handleMenuClose}>
-        <form onSubmit={handleSubmit(onSubmit)} className="p-16 flex flex-col items-end">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="p-16 flex flex-col items-end"
+        >
           <Controller
             name="name"
             control={control}
@@ -88,7 +90,12 @@ function CheckListMenu(props) {
               />
             )}
           />
-          <Button color="secondary" type="submit" disabled={_.isEmpty(dirtyFields) || !isValid} variant="contained">
+          <Button
+            color="secondary"
+            type="submit"
+            disabled={_.isEmpty(dirtyFields) || !isValid}
+            variant="contained"
+          >
             Add
           </Button>
         </form>

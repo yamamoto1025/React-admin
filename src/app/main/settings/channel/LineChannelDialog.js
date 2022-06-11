@@ -1,63 +1,67 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import AppBar from '@mui/material/AppBar';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import Icon from '@mui/material/Icon';
-import IconButton from '@mui/material/IconButton';
-import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
-import FileCopy from '@mui/icons-material/FileCopy';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import { useCallback, useEffect } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-import { showMessage } from 'app/store/fuse/messageSlice';
+import { yupResolver } from "@hookform/resolvers/yup";
+import AppBar from "@mui/material/AppBar";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import Icon from "@mui/material/Icon";
+import IconButton from "@mui/material/IconButton";
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import FileCopy from "@mui/icons-material/FileCopy";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import { useCallback, useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { showMessage } from "app/store/fuse/messageSlice";
 
-import _ from '@lodash';
-import * as yup from 'yup';
+const Buffer = require("buffer").Buffer;
 
-import { Divider } from '@mui/material';
+import _ from "@lodash";
+import * as yup from "yup";
+
+import { Divider } from "@mui/material";
 import {
   addLineChannel,
   updateLineChannel,
   removeLineChannel,
   closeNewLineChannelDialog,
   closeEditLineChannelDialog,
-} from './store/channelsSlice';
+} from "./store/channelsSlice";
 
 const defaultValues = {
-  id: '',
-  name: '',
-  channelSecret: '',
-  accessToken: '',
+  id: "",
+  name: "",
+  channelSecret: "",
+  accessToken: "",
 };
 /**
  * Form Validation Schema
  */
 const schema = yup.object().shape({
-  name: yup.string().required('You must enter a channel name'),
-  channelSecret: yup.string().required('You must enter a channel secret'),
-  accessToken: yup.string().required('You must enter a access token'),
+  name: yup.string().required("You must enter a channel name"),
+  channelSecret: yup.string().required("You must enter a channel secret"),
+  accessToken: yup.string().required("You must enter a access token"),
 });
 
 export default function LineChannelDialog(props) {
   const dispatch = useDispatch();
   const channelDialog = useSelector(({ channels }) => channels.channelDialog);
 
-  const { control, watch, reset, handleSubmit, formState, getValues } = useForm({
-    mode: 'onChange',
-    defaultValues,
-    resolver: yupResolver(schema),
-  });
+  const { control, watch, reset, handleSubmit, formState, getValues } = useForm(
+    {
+      mode: "onChange",
+      defaultValues,
+      resolver: yupResolver(schema),
+    }
+  );
 
   const { isValid, dirtyFields, errors } = formState;
 
-  const id = watch('id');
-  const name = watch('name');
-  const avatar = watch('avatar');
+  const id = watch("id");
+  const name = watch("name");
+  const avatar = watch("avatar");
 
   /**
    * Initialize Dialog with Data
@@ -66,14 +70,14 @@ export default function LineChannelDialog(props) {
     /**
      * Dialog type: 'edit'
      */
-    if (channelDialog.type === 'edit' && channelDialog.data) {
+    if (channelDialog.type === "edit" && channelDialog.data) {
       reset({ ...channelDialog.data.line });
     }
 
     /**
      * Dialog type: 'new'
      */
-    if (channelDialog.type === 'new') {
+    if (channelDialog.type === "new") {
       reset({
         ...defaultValues,
       });
@@ -93,7 +97,7 @@ export default function LineChannelDialog(props) {
    * Close Dialog
    */
   function closeComposeDialog() {
-    return channelDialog.type === 'edit'
+    return channelDialog.type === "edit"
       ? dispatch(closeEditLineChannelDialog())
       : dispatch(closeNewLineChannelDialog());
   }
@@ -102,8 +106,9 @@ export default function LineChannelDialog(props) {
    * Form Submit
    */
   function onSubmit(data) {
-    if (channelDialog.type === 'new') {
+    if (channelDialog.type === "new") {
       dispatch(addLineChannel(data));
+      dispatch(getChannels());
     } else {
       dispatch(
         updateLineChannel({
@@ -129,7 +134,7 @@ export default function LineChannelDialog(props) {
   return (
     <Dialog
       classes={{
-        paper: 'm-24',
+        paper: "m-24",
       }}
       {...channelDialog.line.props}
       onClose={closeComposeDialog}
@@ -139,12 +144,18 @@ export default function LineChannelDialog(props) {
       <AppBar position="static" elevation={0}>
         <Toolbar className="flex w-full">
           <Typography variant="subtitle1" color="inherit">
-            {channelDialog.type === 'new' ? 'New LINE Channel' : 'Edit LINE Channel'}
+            {channelDialog.type === "new"
+              ? "New LINE Channel"
+              : "Edit LINE Channel"}
           </Typography>
         </Toolbar>
       </AppBar>
-      <form noValidate onSubmit={handleSubmit(onSubmit)} className="flex flex-col md:overflow-hidden">
-        <DialogContent classes={{ root: 'p-24' }}>
+      <form
+        noValidate
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col md:overflow-hidden"
+      >
+        <DialogContent classes={{ root: "p-24" }}>
           <div className="mx-16">
             <Typography variant="h6" gutterBottom component="div">
               Get necessary values from your channel settings
@@ -157,17 +168,19 @@ export default function LineChannelDialog(props) {
               - Click on the channel you created to access your channel settings
             </Typography>
             <Typography variant="body1" gutterBottom component="div">
-              - Find the Channel name from Basic settings {'>'} Channel name.
+              - Find the Channel name from Basic settings {">"} Channel name.
             </Typography>
             <Typography variant="body1" gutterBottom component="div">
-              - Find the Channel secret from Basic settings {'>'} Channel secret.
+              - Find the Channel secret from Basic settings {">"} Channel
+              secret.
             </Typography>
             <Typography variant="body1" gutterBottom component="div">
-              - Find the LINE ID from Messaging API {'>'} Bot basic ID.
+              - Find the LINE ID from Messaging API {">"} Bot basic ID.
             </Typography>
             <Typography variant="body1" gutterBottom component="div">
-              - Then, scroll farther to Messaging API settings. There, you will see a Channel access token field, with
-              an issue button. Click that button to get your access token
+              - Then, scroll farther to Messaging API settings. There, you will
+              see a Channel access token field, with an issue button. Click that
+              button to get your access token
             </Typography>
 
             {/* <ul>
@@ -279,56 +292,67 @@ export default function LineChannelDialog(props) {
               )}
             />
           </div>
-          {channelDialog.type === 'edit' && channelDialog.data && channelDialog.data.id && (
-            <div className="flex">
-              <TextField
-                // inputProps={{ readOnly: true }}
-                className="mb-24"
-                label="Webhook URL"
-                id="webhook"
-                variant="outlined"
-                fullWidth
-                value={`${process.env.REACT_APP_BACKEND_URL}/api/webhook/line/${Buffer.from(
-                  channelDialog.data.id,
-                  'binary'
-                ).toString('base64')}`}
-                InputProps={{
-                  readOnly: true,
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => {
-                          navigator.clipboard.writeText(
-                            `${process.env.REACT_APP_BACKEND_URL}/api/webhook/line/${Buffer.from(
-                              channelDialog.data.id,
-                              'binary'
-                            ).toString('base64')}`
-                          );
-                          dispatch(
-                            showMessage({
-                              message: 'Copied to clipboard!',
-                              autoHideDuration: 1000,
-                              variant: 'info',
-                            })
-                          );
-                        }}
-                        size="large"
-                      >
-                        <FileCopy />
-                      </IconButton>
-                      {/* <FileCopy/> */}
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </div>
-          )}
+          {channelDialog.type === "edit" &&
+            channelDialog.data &&
+            channelDialog.data.id && (
+              <div className="flex">
+                <TextField
+                  // inputProps={{ readOnly: true }}
+                  className="mb-24"
+                  label="Webhook URL"
+                  id="webhook"
+                  variant="outlined"
+                  fullWidth
+                  value={`${
+                    process.env.REACT_APP_BACKEND_URL
+                  }/api/webhook/line/${Buffer.from(
+                    channelDialog.data.id,
+                    "binary"
+                  ).toString("base64")}`}
+                  InputProps={{
+                    readOnly: true,
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => {
+                            navigator.clipboard.writeText(
+                              `${
+                                process.env.REACT_APP_BACKEND_URL
+                              }/api/webhook/line/${Buffer.from(
+                                channelDialog.data.id,
+                                "binary"
+                              ).toString("base64")}`
+                            );
+                            dispatch(
+                              showMessage({
+                                message: "Copied to clipboard!",
+                                autoHideDuration: 1000,
+                                variant: "info",
+                              })
+                            );
+                          }}
+                          size="large"
+                        >
+                          <FileCopy />
+                        </IconButton>
+                        {/* <FileCopy/> */}
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </div>
+            )}
         </DialogContent>
 
-        {channelDialog.type === 'new' ? (
+        {channelDialog.type === "new" ? (
           <DialogActions className="justify-between p-4 pb-16">
             <div className="px-16">
-              <Button variant="contained" color="secondary" type="submit" disabled={_.isEmpty(dirtyFields) || !isValid}>
+              <Button
+                variant="contained"
+                color="secondary"
+                type="submit"
+                disabled={_.isEmpty(dirtyFields) || !isValid}
+              >
                 Add
               </Button>
             </div>
@@ -336,7 +360,12 @@ export default function LineChannelDialog(props) {
         ) : (
           <DialogActions className="justify-between p-4 pb-16">
             <div className="px-16">
-              <Button variant="contained" color="secondary" type="submit" disabled={_.isEmpty(dirtyFields) || !isValid}>
+              <Button
+                variant="contained"
+                color="secondary"
+                type="submit"
+                disabled={_.isEmpty(dirtyFields) || !isValid}
+              >
                 Save
               </Button>
             </div>

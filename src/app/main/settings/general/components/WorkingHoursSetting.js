@@ -1,21 +1,21 @@
 // import Typography from '@mui/material/Typography';
-import { motion } from 'framer-motion';
-import FuseLoading from '@fuse/core/FuseLoading';
+import { motion } from "framer-motion";
+import FuseLoading from "@fuse/core/FuseLoading";
 
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import AppBar from '@mui/material/AppBar';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import TextField from '@mui/material/TextField';
+import AppBar from "@mui/material/AppBar";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
+import TextField from "@mui/material/TextField";
 
-import { updateOrganization } from '../store/generalSlice';
-import TimeRange from './TimeRange';
+import { updateOrganization } from "../store/generalSlice";
+import TimeRange from "./TimeRange";
 
 const container = {
   show: {
@@ -33,9 +33,17 @@ function WorkingHoursSetting() {
   const dispatch = useDispatch();
   const organization = useSelector(({ general }) => general.organization);
 
-  const label = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  const label = [
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+  ];
   const [value, setValue] = useState();
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (organization && organization.organization) {
@@ -55,14 +63,14 @@ function WorkingHoursSetting() {
 
   useEffect(() => {
     if (value) {
-      console.log('value ', value);
+      console.log("value ", value);
     }
   }, [value]);
   /**
    * Form Submit
    */
   function onSubmit() {
-    console.log('submit value ', value);
+    console.log("submit value ", value);
     if (value && value.length === 7) {
       const newOrganization = {
         ...organization.organization,
@@ -93,8 +101,8 @@ function WorkingHoursSetting() {
   }
 
   function onTimeRangeChange(data, index) {
-    console.log('Change data: ', data);
-    console.log('Change index: ', index);
+    console.log("Change data: ", data);
+    console.log("Change index: ", index);
     const newValue = [...value];
     newValue[index] = data;
     setValue(newValue);
@@ -111,13 +119,26 @@ function WorkingHoursSetting() {
     <motion.div variants={container} initial="hidden" animate="show">
       <div className="md:flex m-1 md:m-24">
         <div className="flex flex-col flex-1">
-          <Card component={motion.div} variants={item} className="w-full mb-12 rounded-16 shadow">
+          <Card
+            component={motion.div}
+            variants={item}
+            className="w-full mb-12 rounded-16 shadow"
+          >
             <AppBar position="static" elevation={0}>
               <Toolbar className="px-8">
-                <Typography variant="subtitle1" color="inherit" className="flex-1 px-12 font-medium">
+                <Typography
+                  variant="subtitle1"
+                  color="inherit"
+                  className="flex-1 px-12 font-medium"
+                >
                   Working Hours
                 </Typography>
-                <Button className="whitespace-nowrap mr-12" variant="contained" color="secondary" onClick={onSubmit}>
+                <Button
+                  className="whitespace-nowrap mr-12"
+                  variant="contained"
+                  color="secondary"
+                  onClick={onSubmit}
+                >
                   <span className="hidden sm:flex">Save</span>
                   <span className="flex sm:hidden">Save</span>
                 </Button>
@@ -127,7 +148,7 @@ function WorkingHoursSetting() {
             <CardContent>
               {value.map((element, index) => {
                 return (
-                  <>
+                  <div key={index}>
                     <TimeRange
                       className="mb-24"
                       onChange={onTimeRangeChange}
@@ -138,7 +159,7 @@ function WorkingHoursSetting() {
                     />
                     {/* {index < value.length - 1 && <Divider />} */}
                     <Divider />
-                  </>
+                  </div>
                 );
               })}
 

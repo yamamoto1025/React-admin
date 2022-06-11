@@ -1,28 +1,28 @@
-import FusePageCarded from '@fuse/core/FusePageCarded';
-import Button from '@mui/material/Button';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
-import Typography from '@mui/material/Typography';
-import withReducer from 'app/store/withReducer';
-import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams, Link } from 'react-router-dom';
-import { styled } from '@mui/material/styles';
-import { getReply, addNewReply } from '../store/replySlice';
-import { setNewResponse } from '../store/responseSlice';
-import reducer from '../store';
-import ReplyHeader from './ReplyHeader';
-import ReplyInformation from './tabs/ReplyInformation';
-import ReplyKeyword from './tabs/ReplyKeyword';
-import ReplyResponse from './tabs/ReplyResponse';
+import FusePageCarded from "@fuse/core/FusePageCarded";
+import Button from "@mui/material/Button";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import Typography from "@mui/material/Typography";
+import withReducer from "app/store/withReducer";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, Link } from "react-router-dom";
+import { styled } from "@mui/material/styles";
+import { getReply, addNewReply } from "../store/replySlice";
+import { setNewResponse } from "../store/responseSlice";
+import reducer from "../store";
+import ReplyHeader from "./ReplyHeader";
+import ReplyInformation from "./tabs/ReplyInformation";
+import ReplyKeyword from "./tabs/ReplyKeyword";
+import ReplyResponse from "./tabs/ReplyResponse";
 
 const Root = styled(FusePageCarded)(({ theme }) => ({
-  '& .FusePageCarded-header': {
+  "& .FusePageCarded-header": {
     minHeight: 72,
     height: 72,
-    alignItems: 'center',
-    [theme.breakpoints.up('sm')]: {
+    alignItems: "center",
+    [theme.breakpoints.up("sm")]: {
       minHeight: 136,
       height: 136,
     },
@@ -41,7 +41,7 @@ function Reply(props) {
   useEffect(() => {
     const { replyId } = routeParams;
 
-    if (replyId === 'new') {
+    if (replyId === "new") {
       /**
        * Create New Product data
        */
@@ -81,7 +81,13 @@ function Reply(props) {
         <Typography color="textSecondary" variant="h5">
           There is no such reply!
         </Typography>
-        <Button className="mt-24" component={Link} variant="outlined" to="/settings/reply" color="inherit">
+        <Button
+          className="mt-24"
+          component={Link}
+          variant="outlined"
+          to="/settings/reply"
+          color="inherit"
+        >
           Go to Reply Page
         </Button>
       </motion.div>
@@ -91,43 +97,47 @@ function Reply(props) {
   return (
     <Root
       header={<ReplyHeader />}
-      contentToolbar={
-        <Tabs
-          value={tabValue}
-          onChange={handleTabChange}
-          indicatorColor="primary"
-          textColor="primary"
-          variant="scrollable"
-          scrollButtons="auto"
-          classes={{ root: 'w-full h-64' }}
-        >
-          <Tab className="h-64" label="Information" />
-          <Tab
-            className="h-64"
-            label="Keyword"
-            disabled={reply && (reply.type === 'quick' || (reply.type === 'auto' && reply.event === 'welcome'))}
-          />
-          <Tab className="h-64" label="Response" />
-        </Tabs>
-      }
       content={
-        <div className="p-16 sm:p-24 max-w-2xl">
-          <div className={tabValue !== 0 ? 'hidden' : ''}>
-            <ReplyInformation />
-          </div>
+        <>
+          <Tabs
+            value={tabValue}
+            onChange={handleTabChange}
+            indicatorColor="primary"
+            textColor="primary"
+            variant="scrollable"
+            scrollButtons="auto"
+            classes={{ root: "w-full h-64" }}
+          >
+            <Tab className="h-64" label="Information" />
+            <Tab
+              className="h-64"
+              label="Keyword"
+              disabled={
+                reply &&
+                (reply.type === "quick" ||
+                  (reply.type === "auto" && reply.event === "welcome"))
+              }
+            />
+            <Tab className="h-64" label="Response" />
+          </Tabs>
+          <div className="p-16 sm:p-24">
+            <div className={tabValue !== 0 ? "hidden" : ""}>
+              <ReplyInformation />
+            </div>
 
-          <div className={tabValue !== 1 ? 'hidden' : ''}>
-            <ReplyKeyword />
-          </div>
+            <div className={tabValue !== 1 ? "hidden" : ""}>
+              <ReplyKeyword />
+            </div>
 
-          <div className={tabValue !== 2 ? 'hidden' : ''}>
-            <ReplyResponse />
+            <div className={tabValue !== 2 ? "hidden" : ""}>
+              <ReplyResponse />
+            </div>
           </div>
-        </div>
+        </>
       }
       // innerScroll
     />
   );
 }
 
-export default withReducer('replyApp', reducer)(Reply);
+export default withReducer("replyApp", reducer)(Reply);

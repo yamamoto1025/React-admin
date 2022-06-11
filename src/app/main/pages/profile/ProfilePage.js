@@ -1,28 +1,39 @@
-import FusePageSimple from '@fuse/core/FusePageSimple';
-import FuseLoading from '@fuse/core/FuseLoading';
-import makeStyles from '@mui/styles/makeStyles';
-import { useEffect, useState } from 'react';
+import FusePageSimple from "@fuse/core/FusePageSimple";
+import FuseLoading from "@fuse/core/FuseLoading";
+import makeStyles from "@mui/styles/makeStyles";
+import { useEffect, useState } from "react";
 
-import withReducer from 'app/store/withReducer';
-import { useDispatch, useSelector } from 'react-redux';
-import reducer from './store';
+import withReducer from "app/store/withReducer";
+import { useDispatch, useSelector } from "react-redux";
+import reducer from "./store";
 
-import { getOrganizations, getProfile } from './store/profileSlice';
-import ProfileToolbar from './ProfileToolbar';
-import ProfileContent from './ProfileContent';
-import ProfileDialog from './ProfileDialog';
+import { motion } from "framer-motion";
+import { getOrganizations, getProfile } from "./store/profileSlice";
+import ProfileToolbar from "./ProfileToolbar";
+import ProfileContent from "./ProfileContent";
+import ProfileDialog from "./ProfileDialog";
+import { styled } from "@mui/material/styles";
+
+const Root = styled(FusePageSimple)(({ theme }) => ({
+  "& .FusePageSimple-header": {
+    backgroundColor: theme.palette.background.paper,
+    borderBottomWidth: 1,
+    borderStyle: "solid",
+    borderColor: theme.palette.divider,
+  },
+}));
 
 const useStyles = makeStyles((theme) => ({
   topBg: {
     background: 'url("assets/images/profile/morain-lake.jpg")!important',
-    backgroundSize: 'cover!important',
-    backgroundPosition: 'center center!important',
+    backgroundSize: "cover!important",
+    backgroundPosition: "center center!important",
   },
   layoutHeader: {
-    background: 'none',
+    background: "none",
     height: 320,
     minHeight: 320,
-    [theme.breakpoints.down('lg')]: {
+    [theme.breakpoints.down("lg")]: {
       height: 240,
       minHeight: 240,
     },
@@ -32,7 +43,9 @@ const useStyles = makeStyles((theme) => ({
 function ProfilePage() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const organization = useSelector(({ auth }) => auth.organization.organization);
+  const organization = useSelector(
+    ({ auth }) => auth.organization.organization
+  );
 
   const [loading, setLoading] = useState(true);
 
@@ -52,19 +65,13 @@ function ProfilePage() {
 
   return (
     <>
-      <FusePageSimple
-        classes={{
-          // topBg: classes.topBg,
-          // header: classes.layoutHeader,
-          wrapper: 'bg-transparent',
-          content: 'w-full max-w-2xl mx-auto',
-          toolbar: 'w-full max-w-2xl mx-auto relative flex flex-col min-h-auto h-auto items-start',
-        }}
-        header={<></>}
-        contentToolbar={<ProfileToolbar />}
+      <Root
+        header={<ProfileToolbar />}
         content={
-          <div className="p-16 sm:p-24">
-            <ProfileContent />
+          <div className="flex flex justify-center w-full mx-auto p-24 sm:p-32">
+            <div style={{ width: "100%" }}>
+              <ProfileContent />
+            </div>
           </div>
         }
       />
@@ -73,4 +80,4 @@ function ProfilePage() {
   );
 }
 
-export default withReducer('profilePage', reducer)(ProfilePage);
+export default withReducer("profilePage", reducer)(ProfilePage);

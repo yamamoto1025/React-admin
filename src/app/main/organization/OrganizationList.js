@@ -1,11 +1,10 @@
-import FuseUtils from '@fuse/utils';
-import Typography from '@mui/material/Typography';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import OrganizationListItem from './OrganizationListItem';
+import FuseUtils from "@fuse/utils";
+import Typography from "@mui/material/Typography";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import OrganizationListItem from "./OrganizationListItem";
 
-import { selectOrganizations } from './store/organizationsSlice';
+import { selectOrganizations } from "./store/organizationsSlice";
 
 function OrganizationList() {
   const organizations = useSelector(selectOrganizations);
@@ -47,4 +46,4 @@ function OrganizationList() {
   );
 }
 
-export default withRouter(OrganizationList);
+export default OrganizationList;
